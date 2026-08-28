@@ -1,9 +1,9 @@
 from pathlib import Path
 from typing import Any, Dict, NamedTuple, List
-from rptodo.database import DatabaseHandler
-from rptodo import DB_READ_ERROR
-from rptodo.database import DatabaseHandler
-from rptodo import DB_READ_ERROR, ID_ERROR
+from anything.database import DatabaseHandler
+from anything import DB_READ_ERROR
+from anything.database import DatabaseHandler
+from anything import DB_READ_ERROR, ID_ERROR
 
 class CurrentTodo(NamedTuple):
     todo: Dict[str, Any]

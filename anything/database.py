@@ -2,10 +2,10 @@ import configparser
 from pathlib import Path
 import json
 
-from rptodo import DB_WRITE_ERROR, SUCCESS
+from anything import DB_WRITE_ERROR, SUCCESS
 from typing import Any, Dict, List, NamedTuple
 
-from rptodo import DB_READ_ERROR, DB_WRITE_ERROR, JSON_ERROR, SUCCESS
+from anything import DB_READ_ERROR, DB_WRITE_ERROR, JSON_ERROR, SUCCESS
 
 DEFAULT_DB_FILE_PATH = Path.home().joinpath(
     "." + Path.home().stem + "_todo.json"

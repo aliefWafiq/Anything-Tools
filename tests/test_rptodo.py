@@ -3,7 +3,7 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-from rptodo import(
+from anything import(
     DB_READ_ERROR,
     SUCCESS,
     __app_name__,
@@ -12,7 +12,7 @@ from rptodo import(
     rptodo
 )
 
-from rptodo import __app_name__, __version__, cli
+from anything import __app_name__, __version__, cli
 
 runner = CliRunner()
 

@@ -1,12 +1,12 @@
 from pathlib import Path
 from typing import Optional, List
 import typer
-from rptodo import __app_name__, __version__
+from anything import __app_name__, __version__
 import pyfiglet
 import shlex
-from rptodo.function.ytDownload import ytDownload
+from anything.function.ytDownload import ytDownload
 
-from rptodo import ERRORS, __app_name__, __version__, config, database, rptodo
+from anything import ERRORS, __app_name__, __version__, config, database, rptodo
 
 app = typer.Typer()
 
@@ -220,11 +220,14 @@ def yt_downloader() -> None:
         else:
             ytDownload(link, option)
 
-
         try:
             args = shlex.split(option)
         except Exception as e:
             typer.secho(f"Error: {e}", fg=typer.colors.RED)
+
+@app.command(name="wordToPDF")
+def wordToPDF() -> None:
+    
 
 @app.command(name="menu")
 def menu() -> None:
@@ -236,11 +239,12 @@ def menu() -> None:
             "(1) To do list\n"
             "(2) PDF summary\n"
             "(3) Yt downloader\n"
-            "(4) exit\n"
+            "(4) Word to PDF\n"
+            "(5) exit\n"
         )
         option = input("Anything > ").strip()
     
-        if option == "4":
+        if option == "5":
             typer.secho("Bye!", fg=typer.colors.BRIGHT_BLUE)
             break
 

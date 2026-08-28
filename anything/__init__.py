@@ -1,4 +1,4 @@
-__app_name__ = "rptodo"
+__app_name__ = "anything"
 __version__ = "0.1.0"
 
 (

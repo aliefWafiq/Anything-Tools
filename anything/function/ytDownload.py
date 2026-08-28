@@ -1,6 +1,7 @@
 import yt_dlp
 import typer
 import sys
+import os
 
 def proggres(stream, chunk, bytesRemaining):
     totalSize = stream.filesize
@@ -12,16 +13,18 @@ def proggres(stream, chunk, bytesRemaining):
 
 def ytDownload(url, type):
     try:
+        download_path = os.path.join(os.path.expanduser("~"), "Downloads")
+
         if type == "video":
             ydl_opts = {
                 "format": "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
-                "outtmpl": "Downloads/%(title)s.%(ext)s",
+                "outtmpl": os.path.join(download_path, "%(title)s.%(ext)s"),
             }
 
         else:
             ydl_opts = {
                 "format": "bestaudio/best",
-                "outtmpl": "Downloads/%(title)s.%(ext)s",
+                "outtmpl": os.path.join(download_path, "%(title)s.%(ext)s"),
                 "postprocessors": [{
                     "key": "FFmpegExtractAudio",
                     "preferredcodec": "mp3",
