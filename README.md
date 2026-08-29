@@ -22,7 +22,7 @@ Run this command first to set up the basic configuration required by the applica
 ```bash
 py -m anything init
 
-**2. Open Main Menu**
+2. Open Main Menu
 Launch the interactive menu to navigate and use all the available features:
 Bash
 
