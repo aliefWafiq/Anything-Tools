@@ -21,12 +21,15 @@ To start using the tools, you only need to know these primary commands:
 Run this command first to set up the basic configuration required by the application:
 ```bash
 py -m anything init
+```
 
-2. Open Main Menu
+**2. Open Main Menu**
 Launch the interactive menu to navigate and use all the available features:
 Bash
 
+```bash
 py -m anything menu
+```
 
 Development Note:
 This project is currently under active development. Some features are still a work in progress and may receive updates or changes in the future.
