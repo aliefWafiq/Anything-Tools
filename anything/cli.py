@@ -5,6 +5,7 @@ from anything import __app_name__, __version__
 import pyfiglet
 import shlex
 from anything.function.ytDownload import ytDownload
+from anything.function.converter import converter
 
 from anything import ERRORS, __app_name__, __version__, config, database, rptodo
 
@@ -227,7 +228,7 @@ def yt_downloader() -> None:
 
 @app.command(name="wordToPDF")
 def wordToPDF() -> None:
-    
+    converter()
 
 @app.command(name="menu")
 def menu() -> None:
@@ -257,6 +258,14 @@ def menu() -> None:
         elif option == "3":
             try:
                 app(["ytDownloader"], standalone_mode=False)
+                input("\nTekan Enter untuk kembali ke menu...")
+            except Exception as e:
+                typer.secho(f"Kembali ke menu", fg=typer.colors.YELLOW)
+
+        elif option == "4":
+            try:
+                app(["wordToPDF"], standalone_mode=False)
+                input("\nTekan Enter untuk kembali ke menu...")
             except Exception as e:
                 typer.secho(f"Kembali ke menu", fg=typer.colors.YELLOW)
 
