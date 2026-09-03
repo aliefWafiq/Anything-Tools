@@ -6,6 +6,8 @@ import pyfiglet
 import shlex
 from anything.function.ytDownload import ytDownload
 from anything.function.converter import converter
+from anything.function.framework import framework
+import subprocess
 
 from anything import ERRORS, __app_name__, __version__, config, database, rptodo
 
@@ -230,22 +232,27 @@ def yt_downloader() -> None:
 def wordToPDF() -> None:
     converter()
 
+@app.command(name="run")
+def run() -> None:
+    framework()
+
 @app.command(name="menu")
 def menu() -> None:
     while True:
         banner = pyfiglet.figlet_format("Anything")
         typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
         typer.secho(
-            "list menu:\n"
+            "list menu:\n\n"
             "(1) To do list\n"
             "(2) PDF summary\n"
             "(3) Yt downloader\n"
             "(4) Word to PDF\n"
-            "(5) exit\n"
+            "(5) Build framework\n"
+            "(6) exit\n"
         )
         option = input("Anything > ").strip()
     
-        if option == "5":
+        if option == "6":
             typer.secho("Bye!", fg=typer.colors.BRIGHT_BLUE)
             break
 
@@ -268,6 +275,13 @@ def menu() -> None:
                 input("\nTekan Enter untuk kembali ke menu...")
             except Exception as e:
                 typer.secho(f"Kembali ke menu", fg=typer.colors.YELLOW)
+
+        elif option == "5":
+            try:
+                app(["run"], standalone_mode=False)
+                input("\nTekan Enter untuk kembali ke menu...")
+            except Exception as e:
+                typer.secho(f"Kembali ke menu {e}", fg=typer.colors.YELLOW)
 
         else:
             try:

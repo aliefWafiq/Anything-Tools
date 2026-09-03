@@ -1,3 +1,5 @@
 venv/
+venv_win/
+venv_win/
 __pycache__/
 .pytest_cache/
