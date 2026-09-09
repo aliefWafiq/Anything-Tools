@@ -4,17 +4,17 @@ import tkinter as tk
 from tkinter import filedialog
 
 def framework():
-    project_directory = filedialog.askdirectory(title="Select a directory for your project")
+    root = tk.Tk()
+    root.withdraw()
 
+    project_directory = filedialog.askdirectory(title="Select a directory for your project")
+    
     typer.secho(f"\nSelected project directory: {project_directory}", fg=typer.colors.GREEN)
     typer.secho(
-        "\n\nSelect the framework :\n\n"
+        "\nSelect the framework :\n\n"
         "-Laravel\n"
         "-Next Js\n"
     )
-
-    root = tk.Tk()
-    root.withdraw()
 
     framework = input("Anything (framework) > ").strip()
 
@@ -34,7 +34,9 @@ def framework():
         typer.secho("Invalid framework. Please try again.", fg=typer.colors.RED)
             
 def makeLaravel(version, project_name, project_directory):
-    print(f"Creating Laravel project '{project_name}' with version {version} on {project_directory}")
+    subprocess.run(["composer", "create-project", "--prefer-dist", f"Laravel/laravel={version}", f"{project_directory}/{project_name}"], shell=True)
+    print(f"Created Laravel project '{project_name}' with version {version} on {project_directory}")
 
 def makeNextJs(version, project_name, project_directory):
-    print(f"Creating Next.js project '{project_name}' with version {version} on {project_directory}...")
+    subprocess.run(["npx", f"create-next-app@{version}", f"{project_directory}/{project_name}"], shell=True)
+    print(f"Created Next.js project '{project_name}' with version {version} on {project_directory}...")

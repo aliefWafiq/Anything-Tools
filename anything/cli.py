@@ -207,6 +207,9 @@ def remove_all(
 
 @app.command(name="ytDownloader")
 def yt_downloader() -> None:
+    banner = pyfiglet.figlet_format("Anything")
+    typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
+
     link = typer.prompt("Masukkan link video ")
 
     typer.secho(
@@ -230,15 +233,21 @@ def yt_downloader() -> None:
 
 @app.command(name="wordToPDF")
 def wordToPDF() -> None:
+    banner = pyfiglet.figlet_format("Anything")
+    typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
     converter()
 
 @app.command(name="run")
 def run() -> None:
+    banner = pyfiglet.figlet_format("Anything")
+    typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
     framework()
 
 @app.command(name="menu")
 def menu() -> None:
     while True:
+        typer.clear()
+
         banner = pyfiglet.figlet_format("Anything")
         typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
         typer.secho(
@@ -258,12 +267,14 @@ def menu() -> None:
 
         elif option == "1":
             try:
+                typer.clear()
                 app(["todolist"], standalone_mode=False)
             except Exception as e:
                 typer.secho(f"Kembali ke menu", fg=typer.colors.YELLOW)
 
         elif option == "3":
             try:
+                typer.clear()
                 app(["ytDownloader"], standalone_mode=False)
                 input("\nTekan Enter untuk kembali ke menu...")
             except Exception as e:
@@ -271,6 +282,7 @@ def menu() -> None:
 
         elif option == "4":
             try:
+                typer.clear()
                 app(["wordToPDF"], standalone_mode=False)
                 input("\nTekan Enter untuk kembali ke menu...")
             except Exception as e:
@@ -278,6 +290,7 @@ def menu() -> None:
 
         elif option == "5":
             try:
+                typer.clear()
                 app(["run"], standalone_mode=False)
                 input("\nTekan Enter untuk kembali ke menu...")
             except Exception as e:
