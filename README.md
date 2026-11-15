@@ -9,7 +9,6 @@ Here are the tools currently available and in development:
 *   **Todo List**: Manage and track your daily tasks directly from the terminal.
 *   **YouTube Downloader**: Easily download video and audio files from YouTube.
 *   **Word to PDF Converter**: Convert `.docx` documents to PDF format seamlessly.
-*   **PDF Summarizer**: Automatically extract key summaries from PDF documents *(Work In Progress)*.
 
 ## Getting Started
 
