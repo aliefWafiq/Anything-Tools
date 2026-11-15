@@ -7,7 +7,8 @@ import shlex
 from anything.function.ytDownload import ytDownload
 from anything.function.converter import converter
 from anything.function.framework import framework
-import subprocess
+# from anything.function.summarize.py import summarizer_menu
+# import subprocess
 
 from anything import ERRORS, __app_name__, __version__, config, database, rptodo
 
@@ -80,7 +81,8 @@ def add(
 @app.command(name="todolist")
 def todo_menu() -> None:
     while True:
-        banner = pyfiglet.figlet_format("Anything")
+        typer.clear()
+        banner = pyfiglet.figlet_format("Anything", font="larry3d")
         typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
         typer.secho(
             "To do list:\n"
@@ -207,7 +209,7 @@ def remove_all(
 
 @app.command(name="ytDownloader")
 def yt_downloader() -> None:
-    banner = pyfiglet.figlet_format("Anything")
+    banner = pyfiglet.figlet_format("Anything", font="larry3d")
     typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
 
     link = typer.prompt("Masukkan link video ")
@@ -239,7 +241,7 @@ def wordToPDF() -> None:
 
 @app.command(name="run")
 def run() -> None:
-    banner = pyfiglet.figlet_format("Anything")
+    banner = pyfiglet.figlet_format("Anything", font="larry3d")
     typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
     framework()
 
@@ -248,20 +250,19 @@ def menu() -> None:
     while True:
         typer.clear()
 
-        banner = pyfiglet.figlet_format("Anything")
+        banner = pyfiglet.figlet_format("Anything", font="larry3d")
         typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
         typer.secho(
             "list menu:\n\n"
             "(1) To do list\n"
-            "(2) PDF summary\n"
-            "(3) Yt downloader\n"
-            "(4) Word to PDF\n"
-            "(5) Build framework\n"
-            "(6) exit\n"
+            "(2) Yt downloader\n"
+            "(3) Word to PDF\n"
+            "(4) Build framework\n"
+            "(5) exit\n"
         )
         option = input("Anything > ").strip()
     
-        if option == "6":
+        if option == "5":
             typer.secho("Bye!", fg=typer.colors.BRIGHT_BLUE)
             break
 
@@ -272,27 +273,27 @@ def menu() -> None:
             except Exception as e:
                 typer.secho(f"Kembali ke menu", fg=typer.colors.YELLOW)
 
-        elif option == "3":
+        elif option == "2":
             try:
                 typer.clear()
                 app(["ytDownloader"], standalone_mode=False)
-                input("\nTekan Enter untuk kembali ke menu...")
+                input("\nPress enter to go back to menu...")
+            except Exception as e:
+                typer.secho(f"Kembali ke menu", fg=typer.colors.YELLOW)
+
+        elif option == "3":
+            try:
+                typer.clear()
+                app(["wordToPDF"], standalone_mode=False)
+                input("\nPress enter to go back to menu...")
             except Exception as e:
                 typer.secho(f"Kembali ke menu", fg=typer.colors.YELLOW)
 
         elif option == "4":
             try:
                 typer.clear()
-                app(["wordToPDF"], standalone_mode=False)
-                input("\nTekan Enter untuk kembali ke menu...")
-            except Exception as e:
-                typer.secho(f"Kembali ke menu", fg=typer.colors.YELLOW)
-
-        elif option == "5":
-            try:
-                typer.clear()
                 app(["run"], standalone_mode=False)
-                input("\nTekan Enter untuk kembali ke menu...")
+                input("\nPress enter to go back to menu...")
             except Exception as e:
                 typer.secho(f"Kembali ke menu {e}", fg=typer.colors.YELLOW)
 
