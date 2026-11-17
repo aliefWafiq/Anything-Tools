@@ -7,8 +7,6 @@ import shlex
 from anything.function.ytDownload import ytDownload
 from anything.function.converter import converter
 from anything.function.framework import framework
-# from anything.function.summarize.py import summarizer_menu
-# import subprocess
 
 from anything import ERRORS, __app_name__, __version__, config, database, rptodo
 
@@ -45,7 +43,7 @@ def get_todoer() -> rptodo.Todoer:
         db_path = database.get_database_path(config.CONFIG_FILE_PATH)
     else:
         typer.secho(
-            'Config file not found. Please run "rptodo init" first.',
+            'Config file not found. Please run "anything init" first.',
             fg=typer.colors.RED,
         )
         raise typer.Exit(1)
@@ -54,7 +52,7 @@ def get_todoer() -> rptodo.Todoer:
         return rptodo.Todoer(db_path)
     else:
         typer.secho(
-            'Database not found. Please run "rptodo init" first.',
+            'Database not found. Please run "anything init" first.',
             fg=typer.colors.RED,
         )
         raise typer.Exit(1)

@@ -7,67 +7,78 @@ def framework():
     try:
         root = tk.Tk()
         root.withdraw()
+        status = True
 
         project_directory = filedialog.askdirectory(title="Select a directory for your project")
-    
-        typer.secho(f"\nSelected project directory: {project_directory}", fg=typer.colors.GREEN)
-        typer.secho(
-            "\nSelect the framework :\n\n"
-            "-Laravel\n"
-            "-Next Js\n"
-        )
 
-        framework = input("Anything (framework) > ").strip()
-
-        if framework.lower() == "laravel":
-            project_name = input("\nEnter the project name: ").strip()
+        while status:
+            typer.secho(f"\nSelected project directory: {project_directory}", fg=typer.colors.GREEN)
             typer.secho(
-                "\nSpecify the version you want or just enter to use the latest",
-                fg=typer.colors.GREEN
+                "\nSelect the framework :\n\n"
+                "(1) Laravel\n"
+                "(2) Next Js\n"
             )
-            framework_version = input("Enter framework version: ").strip()
 
-            makeLaravel(framework_version, project_name, project_directory)
+            framework = input("Anything (framework)(1/2) > ").strip()
 
-        elif framework.lower() == "next js":
-            project_name = input("\nEnter the project name: ").strip()
-            typer.secho(
-                "\nSpecify the version you want or just enter to use the latest",
-                fg=typer.colors.GREEN
-            )
-            framework_version = input("Enter framework version: ").strip()
+            if framework.lower() == "1":
+                project_name = input("\nEnter the project name: ").strip()
+                typer.secho(
+                    "\nSpecify the version you want or just enter to use the latest",
+                    fg=typer.colors.GREEN
+                )
+                framework_version = input("Enter framework version: ").strip()
+                create = makeLaravel(framework_version, project_name, project_directory)
 
-            makeNextJs(framework_version, project_name, project_directory)
+                if create == "Success":
+                    status = False
 
-        else:
-            typer.secho("Invalid framework. Please try again.", fg=typer.colors.RED)
+            elif framework.lower() == "2":
+                project_name = input("\nEnter the project name: ").strip()
+                typer.secho(
+                    "\nSpecify the version you want or just enter to use the latest",
+                    fg=typer.colors.GREEN
+                )
+                framework_version = input("Enter framework version: ").strip()
+                create = makeNextJs(framework_version, project_name, project_directory)
+
+                if create == "Success":
+                    status = False
+
+            else:
+                typer.secho("Invalid framework. Please try again.", fg=typer.colors.RED)
     except Exception as e:
         typer.secho(f"\n Terjadi kesalahan {e}", fg=typer.colors.RED)
             
 def makeLaravel(version, project_name, project_directory):
     version_text = "the latest version" if version == "" else f"{version} version"
-    subprocess.run(["composer", "create-project", "--prefer-dist", f"Laravel/laravel={version}", f"{project_directory}/{project_name}"], shell=True)
-    if subprocess.CalledProcessError:
-        typer.secho(
-            f"No such version, please check if the version exist",
-            fg=typer.colors.RED
-        )
-    else:
+    try:
+        subprocess.check_output(["composer", "create-project", "--prefer-dist", f"Laravel/laravel={version}", f"{project_directory}/{project_name}"], shell=True)
         typer.secho(
             f"Created Laravel project '{project_name}' with {version_text} on {project_directory}",
             fg=typer.colors.GREEN
         )
 
-def makeNextJs(version, project_name, project_directory):
-    version_text = "the latest version" if version == "" else f"{version} version"
-    subprocess.run(["npx", f"create-next-app@{version}", f"{project_directory}/{project_name}"], shell=True)
-    if subprocess.CalledProcessError:
+        return "Success"
+    except subprocess.CalledProcessError:
         typer.secho(
-            f"No such version, please check if the version exist",
+            f"Something went wrong, please check if the version exist",
             fg=typer.colors.RED
         )
-    else:
+        return "Failed"
+
+def makeNextJs(version, project_name, project_directory):
+    version_text = "the latest version" if version == "" else f"{version} version"
+    try:
+        subprocess.run(["npx", f"create-next-app@{version}", f"{project_directory}/{project_name}"], shell=True)
         typer.secho(
             f"Created Next.js project '{project_name}' with {version_text} on {project_directory}...",
             fg=typer.colors.GREEN
         )
+        return "Success"
+    except subprocess.CalledProcessError:
+        typer.secho(
+            f"Something went wrong, please check if the version exist",
+            fg=typer.colors.RED
+        )
+        return "Failed"

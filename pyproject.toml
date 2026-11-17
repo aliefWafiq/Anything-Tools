@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anything"
+version = "0.1.0"
+authors = [
+  { name="Alief Wafiq Ramadhan", email="aliefwafiq2@gmail.com" },
+]
+description = "A CLI tool"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "click",
+    "yt-dlp",
+    "tqdm",
+    "colorama",
+    "docx2pdf",
+]
+
+[project.scripts]
+anything = "anything.__main__:main"
