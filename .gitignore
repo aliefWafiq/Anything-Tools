@@ -3,3 +3,7 @@ venv_win/
 venv_win/
 __pycache__/
 .pytest_cache/
+anything.iss
+anything.spec
+pyproject.toml
+build/
