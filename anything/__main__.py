@@ -1,7 +1,7 @@
 from anything import cli, __app_name__
 
 def main():
-    cli.menu()
+    cli.app()
 
 if __name__ == "__main__":
     main()
