@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional, List
+from typing import List
 import typer
 from anything import __app_name__, __version__
 import pyfiglet
@@ -27,6 +27,7 @@ def init(
             f'Creating config file failed with "{ERRORS[app_init_error]}"',
             fg=typer.colors.RED,
         )
+        
     db_init_error = database.init_database(Path(db_path))
     if db_init_error:
         typer.secho(
@@ -44,6 +45,7 @@ def get_todoer() -> rptodo.Todoer:
             'Config file not found. Please run "anything init" first.',
             fg=typer.colors.RED,
         )
+        return None
     
     if db_path.exists():
         return rptodo.Todoer(db_path)
@@ -52,6 +54,7 @@ def get_todoer() -> rptodo.Todoer:
             'Database not found. Please run "anything init" first.',
             fg=typer.colors.RED,
         )
+        return None
 
 @app.command()
 def add(
@@ -76,14 +79,17 @@ def todo_menu() -> None:
     while True:
         # typer.clear()
         todoer = get_todoer()
+        if todoer == None:
+            break
+
         todo_list = todoer.get_todo_list()
         banner = pyfiglet.figlet_format("Anything", font="larry3d")
         typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
 
         if len(todo_list) == 0:
             typer.secho(
-            "There are no tasks in your to-do list yet", fg=typer.colors.YELLOW
-        )
+                "There are no tasks in your to-do list yet", fg=typer.colors.YELLOW
+            )
         typer.secho("\nto-do list:\n", fg=typer.colors.BLUE, bold=True)
         columns = (
             "ID. ",
@@ -128,10 +134,13 @@ def set_done(todo_id: int = typer.Argument(...)) -> None:
     todoer = get_todoer()
     todo, error = todoer.set_done(todo_id)
     if error:
+        typer.secho("Id not found", fg=typer.colors.RED)
+    else:
         typer.secho(
             f""" to-do #{todo_id} "{todo['Description']}" completed! """,
             fg=typer.colors.GREEN
         )
+
 
 @app.command(name="remove")
 def remove(
@@ -165,6 +174,7 @@ def remove(
             todo = todo_list[todo_id - 1]
         except IndexError:
             typer.secho("Invalid TODO_ID", fg=typer.colors.RED)
+            return
         delete = typer.confirm(
             f"Delete to-do # {todo_id}: {todo['Description']}?"
         )
@@ -182,6 +192,9 @@ def remove_all(
     ),
 ) -> None:
     todoer = get_todoer()
+    if todoer == None:
+        return
+
     if force:
         error = todoer.remove_all().error
         if error:
@@ -199,7 +212,7 @@ def yt_downloader() -> None:
     banner = pyfiglet.figlet_format("Anything", font="larry3d")
     typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
 
-    link = typer.prompt("Masukkan link video ")
+    link = typer.prompt("Enter the video link ")
 
     typer.secho(
         "- Video\n"
@@ -258,7 +271,8 @@ def menu() -> None:
                 typer.clear()
                 app(["todolist"], standalone_mode=False)
             except Exception as e:
-                typer.secho(f"Kembali ke menu", fg=typer.colors.YELLOW)
+                input("\nPress enter to go back to menu...")
+                typer.secho(f"Back to menu...", fg=typer.colors.YELLOW)
 
         elif option == "2":
             try:
@@ -266,7 +280,7 @@ def menu() -> None:
                 app(["ytDownloader"], standalone_mode=False)
                 input("\nPress enter to go back to menu...")
             except Exception as e:
-                typer.secho(f"Kembali ke menu", fg=typer.colors.YELLOW)
+                typer.secho(f"Back to menu...", fg=typer.colors.YELLOW)
 
         elif option == "3":
             try:
@@ -274,7 +288,7 @@ def menu() -> None:
                 app(["wordToPDF"], standalone_mode=False)
                 input("\nPress enter to go back to menu...")
             except Exception as e:
-                typer.secho(f"Kembali ke menu", fg=typer.colors.YELLOW)
+                typer.secho(f"Back to menu...", fg=typer.colors.YELLOW)
 
         elif option == "4":
             try:
@@ -282,7 +296,7 @@ def menu() -> None:
                 app(["run"], standalone_mode=False)
                 input("\nPress enter to go back to menu...")
             except Exception as e:
-                typer.secho(f"Kembali ke menu {e}", fg=typer.colors.YELLOW)
+                typer.secho(f"Back to menu... {e}", fg=typer.colors.YELLOW)
 
         else:
             try:
@@ -297,6 +311,9 @@ def _version_callback(value: bool) -> None:
         raise typer.Exit()
 
 @app.callback(invoke_without_command=True)
-def main(ctx: typer.Context):
+def main(
+    ctx: typer.Context,
+    version: bool = typer.Option(None, "--version", callback=_version_callback)
+    ):
     if ctx.invoked_subcommand is None:
         menu()

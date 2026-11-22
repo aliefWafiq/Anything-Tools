@@ -2,7 +2,6 @@ from pathlib import Path
 from typing import Any, Dict, NamedTuple, List
 from anything.database import DatabaseHandler
 from anything import DB_READ_ERROR
-from anything.database import DatabaseHandler
 from anything import DB_READ_ERROR, ID_ERROR
 
 class CurrentTodo(NamedTuple):
