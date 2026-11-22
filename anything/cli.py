@@ -75,11 +75,36 @@ def add(
 def todo_menu() -> None:
     while True:
         # typer.clear()
+        todoer = get_todoer()
+        todo_list = todoer.get_todo_list()
         banner = pyfiglet.figlet_format("Anything", font="larry3d")
         typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
+
+        if len(todo_list) == 0:
+            typer.secho(
+            "There are no tasks in your to-do list yet", fg=typer.colors.YELLOW
+        )
+        typer.secho("\nto-do list:\n", fg=typer.colors.BLUE, bold=True)
+        columns = (
+            "ID. ",
+            "| Priority ",
+            "| Done ",
+            "| Description ",
+        )
+        headers = "".join(columns)
+        typer.secho(headers, fg=typer.colors.BLUE, bold=True)
+        typer.secho("-" * len(headers), fg=typer.colors.BLUE)
+        for id, todo in enumerate(todo_list, 1):
+            desc, priority, done = todo.values()
+            typer.secho(
+                f"{id}{(len(columns[0]) - len(str(id))) * ' '}"
+                f"| ({priority}){(len(columns[1]) - len(str(priority)) - 4) * ' '}"
+                f"| {done}{(len(columns[2]) - len(str(done)) - 2) * ' '}"
+                f"| {desc}",
+            )
+        typer.secho("-" * len(headers) + "\n", fg=typer.colors.BLUE)
+
         typer.secho(
-            "To do list:\n"
-            "- list\n"
             "- add <description> --priority <1-3>\n"
             "- complete <TODO_ID>\n" \
             "- remove <TODO_ID>\n"
@@ -95,35 +120,8 @@ def todo_menu() -> None:
             args = shlex.split(option)
             app(args, standalone_mode=False)
         except Exception as e:
+            typer.clear()
             typer.secho(f"Error: {e}", fg=typer.colors.RED)
-
-@app.command(name="list")
-def list_all() -> None:
-    todoer = get_todoer()
-    todo_list = todoer.get_todo_list()
-    if len(todo_list) == 0:
-        typer.secho(
-            "There are no tasks in your to-do list yet", fg=typer.colors.YELLOW
-        )
-    typer.secho("\nto-do list:\n", fg=typer.colors.BLUE, bold=True)
-    columns = (
-        "ID. ",
-        "| Priority ",
-        "| Done ",
-        "| Description ",
-    )
-    headers = "".join(columns)
-    typer.secho(headers, fg=typer.colors.BLUE, bold=True)
-    typer.secho("-" * len(headers), fg=typer.colors.BLUE)
-    for id, todo in enumerate(todo_list, 1):
-        desc, priority, done = todo.values()
-        typer.secho(
-            f"{id}{(len(columns[0]) - len(str(id))) * ' '}"
-            f"| ({priority}){(len(columns[1]) - len(str(priority)) - 4) * ' '}"
-            f"| {done}{(len(columns[2]) - len(str(done)) - 2) * ' '}"
-            f"| {desc}",
-        )
-    typer.secho("-" * len(headers) + "\n", fg=typer.colors.BLUE)
 
 @app.command(name="complete")
 def set_done(todo_id: int = typer.Argument(...)) -> None:
