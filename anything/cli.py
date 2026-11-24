@@ -62,6 +62,9 @@ def add(
     priority: int = typer.Option(2, "--priority", "-p", min=1, max=3),
 ) -> None:
     todoer = get_todoer()
+    if todoer == None:
+            return
+
     todo, error = todoer.add(description, priority)
     if error:
         typer.secho(
@@ -77,7 +80,6 @@ def add(
 @app.command(name="todolist")
 def todo_menu() -> None:
     while True:
-        # typer.clear()
         todoer = get_todoer()
         if todoer == None:
             break
@@ -101,7 +103,9 @@ def todo_menu() -> None:
         typer.secho(headers, fg=typer.colors.BLUE, bold=True)
         typer.secho("-" * len(headers), fg=typer.colors.BLUE)
         for id, todo in enumerate(todo_list, 1):
-            desc, priority, done = todo.values()
+            desc = todo['Description'] 
+            priority = todo['Priority']
+            done = todo['Done']
             typer.secho(
                 f"{id}{(len(columns[0]) - len(str(id))) * ' '}"
                 f"| ({priority}){(len(columns[1]) - len(str(priority)) - 4) * ' '}"
@@ -132,9 +136,12 @@ def todo_menu() -> None:
 @app.command(name="complete")
 def set_done(todo_id: int = typer.Argument(...)) -> None:
     todoer = get_todoer()
+    if todoer == None:
+            return
+    
     todo, error = todoer.set_done(todo_id)
     if error:
-        typer.secho("Id not found", fg=typer.colors.RED)
+        typer.secho(ERRORS[error], fg=typer.colors.RED)
     else:
         typer.secho(
             f""" to-do #{todo_id} "{todo['Description']}" completed! """,
@@ -153,6 +160,9 @@ def remove(
     ),
 ) -> None:
     todoer = get_todoer()
+    if todoer == None:
+            return
+    
     def _remove():
         todo, error = todoer.remove(todo_id)
         if error:
@@ -215,23 +225,18 @@ def yt_downloader() -> None:
     link = typer.prompt("Enter the video link ")
 
     typer.secho(
-        "- Video\n"
-        "- Audio\n"
-        "- Back"
+        "(1) Video\n"
+        "(2) Audio\n"
+        "(3) Back"
     )
     while True:
         option = input("Anything (Yt Downloader) > ").strip()
 
-        if option.strip().lower() == "back":
+        if option.strip().lower() == "3":
             break
 
         else:
             ytDownload(link, option)
-
-        try:
-            args = shlex.split(option)
-        except Exception as e:
-            typer.secho(f"Error: {e}", fg=typer.colors.RED)
 
 @app.command(name="wordToPDF")
 def wordToPDF() -> None:

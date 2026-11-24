@@ -37,6 +37,8 @@ class Todoer:
         if read.error:
             return CurrentTodo({}, read.error)
         try:
+            if todo_id < 1:
+                return CurrentTodo({}, ID_ERROR)
             todo = read.todo_list[todo_id - 1]
         except IndexError:
             return CurrentTodo({}, ID_ERROR)

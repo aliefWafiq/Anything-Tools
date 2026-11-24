@@ -12,13 +12,17 @@ DEFAULT_DB_FILE_PATH = Path.home().joinpath(
 )
 
 def get_database_path(config_file: Path) -> Path:
-    config_parser = configparser.ConfigParser()
-    config_parser.read(config_file)
-    return Path(config_parser["General"]["database"])
+    try:
+        config_parser = configparser.ConfigParser()
+        config_parser.read(config_file)
+        return Path(config_parser["General"]["database"])
+    except Exception as e:
+        print(f"Erro : {e}")
 
 def init_database(db_path: Path) -> int:
     try:
-        db_path.write_text("[]")
+        if not db_path.exist():
+            db_path.write_text("[]")
         return SUCCESS
     except OSError:
         return DB_WRITE_ERROR
@@ -36,7 +40,7 @@ class DatabaseHandler:
             with self._db_path.open("r") as db:
                 try:
                     return DBResponse(json.load(db), SUCCESS)
-                except OSError:
+                except json.JSONDecodeError:
                     return DBResponse([], JSON_ERROR)
         except OSError:
             return DBResponse([], DB_READ_ERROR)
