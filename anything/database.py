@@ -16,12 +16,12 @@ def get_database_path(config_file: Path) -> Path:
         config_parser = configparser.ConfigParser()
         config_parser.read(config_file)
         return Path(config_parser["General"]["database"])
-    except Exception as e:
-        print(f"Erro : {e}")
+    except (KeyError, configparser.Error):
+        return None
 
 def init_database(db_path: Path) -> int:
     try:
-        if not db_path.exist():
+        if not db_path.exists():        
             db_path.write_text("[]")
         return SUCCESS
     except OSError:

@@ -23,20 +23,18 @@ def ytDownload(url, type):
             }
         else:
             typer.secho(f"\n Invalid option", fg=typer.colors.RED)
+            return
 
-        try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                typer.secho(f"Starting download...", fg=typer.colors.YELLOW)
-                info = ydl.extract_info(url, download=False)
-                title = info.get("title", "Unknown Title")
-                typer.secho(f"Title: {title}\n", fg=typer.colors.CYAN, bold=True)
 
-                ydl.download([url])
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            typer.secho(f"Starting download...", fg=typer.colors.YELLOW)
+            info = ydl.extract_info(url, download=False)
+            title = info.get("title", "Unknown Title")
+            typer.secho(f"Title: {title}\n", fg=typer.colors.CYAN, bold=True)
+
+            ydl.download([url])
 
             typer.secho(f"\nDownload finished", fg=typer.colors.GREEN, bold=True)
-            
-        except Exception as e:
-            typer.secho(f"Please try again", fg=typer.colors.RED)
 
     except Exception as e:
         typer.secho(f"\n Error {e}", fg=typer.colors.RED)

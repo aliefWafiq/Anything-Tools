@@ -5,6 +5,13 @@ from tkinter import filedialog
 import shutil
 from pathlib import Path
 
+def ask_project_name():
+    while True:
+        project_name = input("\nEnter the project name: ").strip()
+        if project_name:
+            return project_name
+        typer.secho("Project name cannot be empty.", fg=typer.colors.RED)
+
 def framework():
     try:
         root = tk.Tk()
@@ -30,7 +37,8 @@ def framework():
             framework = input("Anything (framework)(1/2/3) > ").strip()
 
             if framework == "1":
-                project_name = input("\nEnter the project name: ").strip()
+                project_name = ask_project_name()
+
                 typer.secho(
                     "\nSpecify the version you want or just enter to use the latest",
                     fg=typer.colors.GREEN
@@ -42,7 +50,7 @@ def framework():
                     status = False
 
             elif framework == "2":
-                project_name = input("\nEnter the project name: ").strip()
+                project_name = ask_project_name()
                 typer.secho(
                     "\nSpecify the version you want or just enter to use the latest",
                     fg=typer.colors.GREEN
@@ -57,7 +65,7 @@ def framework():
             else:
                 typer.secho("Invalid framework. Please try again.", fg=typer.colors.RED)
     except Exception as e:
-        typer.secho(f"\n Terjadi kesalahan {e}", fg=typer.colors.RED)
+        typer.secho(f"\n Error {e}", fg=typer.colors.RED)
             
 def _run(cmd: list[str]) -> bool:
     exe = shutil.which(cmd[0])

@@ -27,6 +27,7 @@ def init(
             f'Creating config file failed with "{ERRORS[app_init_error]}"',
             fg=typer.colors.RED,
         )
+        return
         
     db_init_error = database.init_database(Path(db_path))
     if db_init_error:
@@ -34,12 +35,19 @@ def init(
             f'Creating database failed with "{ERRORS[db_init_error]}"',
             fg=typer.colors.RED
         )
+        return
     else:
         typer.secho(f"The to-do database is {db_path}",)
 
 def get_todoer() -> rptodo.Todoer:
     if config.CONFIG_FILE_PATH.exists():
         db_path = database.get_database_path(config.CONFIG_FILE_PATH)
+        if db_path is None:
+            typer.secho(
+                'Config file is invalid. Please run "anything init" again.',
+                fg=typer.colors.RED,
+            )
+            return None
     else:
         typer.secho(    
             'Config file not found. Please run "anything init" first.',
@@ -62,7 +70,7 @@ def add(
     priority: int = typer.Option(2, "--priority", "-p", min=1, max=3),
 ) -> None:
     todoer = get_todoer()
-    if todoer == None:
+    if todoer is None:
             return
 
     todo, error = todoer.add(description, priority)
@@ -81,7 +89,7 @@ def add(
 def todo_menu() -> None:
     while True:
         todoer = get_todoer()
-        if todoer == None:
+        if todoer is None:
             break
 
         todo_list = todoer.get_todo_list()
@@ -136,7 +144,7 @@ def todo_menu() -> None:
 @app.command(name="complete")
 def set_done(todo_id: int = typer.Argument(...)) -> None:
     todoer = get_todoer()
-    if todoer == None:
+    if todoer is None:
             return
     
     todo, error = todoer.set_done(todo_id)
@@ -160,7 +168,7 @@ def remove(
     ),
 ) -> None:
     todoer = get_todoer()
-    if todoer == None:
+    if todoer is None:
             return
     
     def _remove():
@@ -202,7 +210,7 @@ def remove_all(
     ),
 ) -> None:
     todoer = get_todoer()
-    if todoer == None:
+    if todoer is None:
         return
 
     if force:

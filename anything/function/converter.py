@@ -32,4 +32,4 @@ def converter():
         else:
             typer.secho(f"Process canceled\n", fg=typer.colors.RED)
     except Exception as e:
-        typer(f"Eror {e}", fg=typer.colors.RED)
+        typer.secho(f"Error {e}", fg=typer.colors.RED)
